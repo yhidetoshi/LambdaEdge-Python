@@ -1,0 +1,45 @@
+service: basicauth
+frameworkVersion: ">=1.48.0"
+
+provider:
+  name: aws
+  stage: dev
+  runtime: python3.8
+  region: us-east-1
+
+functions:
+  function:
+    handler: basic_auth.lambda_handler
+    role: LambdaEdgeBasicAuth
+    timeout: 5
+    description: LambdaEdge Basic Auth Python3
+    memorySize: 128
+
+resources:
+  Resources:
+    LambdaEdgeBasicAuth:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: LambdaEdgeBasicAuth
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+                  - edgelambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+           - PolicyName: LambdaEdgeBasicAuth
+             PolicyDocument:
+               Version: '2012-10-17'
+               Statement:
+                 - Effect: Allow
+                   Action:
+                     - "lambda:GetFunction"
+                     - "lambda:EnableReplication*" 
+                     - "logs:CreateLogGroup"
+                     - "logs:CreateLogStream"
+                     - "logs:PutLogEvents"
+                   Resource: "*"
