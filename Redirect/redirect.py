@@ -54,9 +54,7 @@ def lambda_handler(event, context):
 ### 特定のパス配下のアクセスを別ホストにリダイレクトする ###
 # - hoge.cloudfront.net/index.html --> hoge.cloudfront.net/index.html
 # - hoge.cloudfront.net/v1/index.html --> fuga.cloudfront.net/v1/index.html
-#     - uri="/v2/index.html"
 # - hoge.cloudfront.net/v2/index.html --> fuga.cloudfront.net/v2/index.html
-#     - uri="/v1/index.html"
 
 """
 PATH_PATTERN = '^\/v1\/|^\/v2\/'
