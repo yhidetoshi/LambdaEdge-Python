@@ -1,0 +1,45 @@
+service: redirect
+frameworkVersion: ">=1.70.0"
+
+provider:
+  name: aws
+  stage: dev
+  runtime: python3.8
+  region: us-east-1
+
+functions:
+  function:
+    handler: redirect.lambda_handler
+    role: LambdaEdgeRedirect
+    timeout: 5
+    description: LambdaEdge Redirect Python3
+    memorySize: 128
+
+resources:
+  Resources:
+    LambdaEdgeRedirect:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: LambdaEdgeRedirect
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+                  - edgelambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+           - PolicyName: LambdaEdgeRedirect
+             PolicyDocument:
+               Version: '2012-10-17'
+               Statement:
+                 - Effect: Allow
+                   Action:
+                     - "lambda:GetFunction"
+                     - "lambda:EnableReplication*" 
+                     - "logs:CreateLogGroup"
+                     - "logs:CreateLogStream"
+                     - "logs:PutLogEvents"
+                   Resource: "*"
