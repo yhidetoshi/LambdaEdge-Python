@@ -39,19 +39,19 @@ def lambda_handler(event, context):
 
     if validate_client_ip(client_ip):
         return request
+
+    # Authorizationヘッダーの有無をチェック
+    if 'authorization' not in headers:
+        return ERROR_RESPONSE_AUTH
+
+    encode_auth = headers['authorization'][0]['value'].split(" ")
+    decode_auth = base64.b64decode(encode_auth[1]).decode().split(":")
+    (user, password) = (decode_auth[0], decode_auth[1])
+
+    if validate_auth(user, password):
+        return request
     else:
-        # Authorizationヘッダーの有無をチェック
-        if 'authorization' not in headers:
-            return ERROR_RESPONSE_AUTH
-
-        encode_auth = headers['authorization'][0]['value'].split(" ")
-        decode_auth = base64.b64decode(encode_auth[1]).decode().split(":")
-        (user, password) = (decode_auth[0], decode_auth[1])
-
-        if validate_auth(user, password):
-            return request
-        else:
-            return ERROR_RESPONSE_AUTH
+        return ERROR_RESPONSE_AUTH
 
 
 def validate_auth(user, password):
