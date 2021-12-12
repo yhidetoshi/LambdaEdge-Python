@@ -35,7 +35,7 @@ ERROR_RESPONSE_AUTH = {
 def lambda_handler(event, context):
     request = event['Records'][0]['cf']['request']
     headers = request['headers']
-    client_ip = event['Records'][0]['cf']['request']['clientIp']
+    client_ip = request['clientIp']
 
     if validate_client_ip(client_ip):
         return request
