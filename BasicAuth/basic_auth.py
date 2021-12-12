@@ -59,7 +59,7 @@ def validate_auth(user, password):
     for allow_user in ALLOW_USERS:
         if user == allow_user.get('user') and password == allow_user.get('password'):
             exist_flag = True
-            return allow_user.get('user'), allow_user.get("password")
+            return True
 
     if exist_flag == False:
         return False
