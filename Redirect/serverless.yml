@@ -1,11 +1,12 @@
 service: redirect
-frameworkVersion: ">=1.70.0"
+frameworkVersion: ">=2.68.0"
 
 provider:
   name: aws
   stage: dev
   runtime: python3.8
   region: us-east-1
+  lambdaHashingVersion: 20201221
 
 functions:
   function:
